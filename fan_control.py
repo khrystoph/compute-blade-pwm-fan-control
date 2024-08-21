@@ -13,7 +13,7 @@ import sys
 # We will work on the issue and try to use hardware PWM in the future:
 PWM_FREQ = 25           # [Hz] PWM frequency
 
-FAN_PIN = 18            # BCM pin used to drive PWM fan
+FAN_PIN = 12            # BCM pin used to drive PWM fan
 WAIT_TIME = 1           # [s] Time to wait between each refresh
 
 OFF_TEMP = 40           # [°C] temperature below which to stop the fan
