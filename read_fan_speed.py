@@ -1,25 +1,22 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import RPi.GPIO as GPIO
+from gpiozero import Button
 import time
 
 # Pin configuration
-TACH = 13       # Fan's tachometer output pin
+TACH_PIN = 13       # Fan's tachometer output pin
 PULSE = 2       # Noctua fans puts out two pluses per revolution
 WAIT_TIME = 1   # [s] Time to wait between each refresh
 
-# Setup GPIO
-GPIO.setmode(GPIO.BCM)
-GPIO.setwarnings(False)
-GPIO.setup(TACH, GPIO.IN, pull_up_down=GPIO.PUD_UP)  # Pull up to 3.3V
+# Setup
+fan_tach = Button(TACH_PIN)
 
 # Setup variables
 t = time.time()
 rpm = 0
 
-
 # Caculate pulse frequency and RPM
-def fell(n):
+def pressed():
     global t
     global rpm
 
@@ -31,9 +28,7 @@ def fell(n):
     rpm = (freq / PULSE) * 60
     t = time.time()
 
-
-# Add event to detect
-GPIO.add_event_detect(TACH, GPIO.FALLING, fell)
+fan_tach.when_activated = pressed
 
 try:
     while True:
@@ -42,4 +37,4 @@ try:
         time.sleep(1)   # Detect every second
 
 except KeyboardInterrupt:   # trap a CTRL+C keyboard interrupt
-    GPIO.cleanup()          # resets all GPIO ports used by this function
+    exit()
